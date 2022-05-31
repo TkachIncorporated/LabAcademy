@@ -5,6 +5,7 @@ use unicode_segmentation::UnicodeSegmentation;
 fn from_hex_to_le(vector: &str) -> BigInt {
     let mut numb: BigInt = num::zero();
     let split: Vec<&str> = vector.split('x').collect();
+    let mut add = 0;
 
     let str = split[1];
     let mut parser: i16;
@@ -27,9 +28,11 @@ fn from_hex_to_le(vector: &str) -> BigInt {
         let bin: BigInt = BigInt::new(Sign::Plus, vec![16, 0]);
 
         numb += parser.to_bigint().expect("convert error")
-            * num::pow(bin, pows.try_into().unwrap())
+            * num::pow(bin, (pows + num::pow(-1, add)).try_into().unwrap())
                 .to_bigint()
                 .expect("convert error");
+
+        add += 1;
     }
 
     numb
